@@ -2,14 +2,14 @@ const fs = require("fs");
 const { join } = require("path");
 
 const getFilesWithExtension = (source) =>
-  fs.readdirSync(source).map((name) => join(source, name));
+    fs.readdirSync(source).map((name) => join(source, name));
 
 const getFiles = (source) =>
-  fs
-    .readdirSync(source)
-    .map((name) => join(source, name))
-    .filter((s) => !s.includes("index"))
-    .map((name) => name.split("/").pop());
+    fs
+        .readdirSync(source)
+        .map((name) => join(source, name))
+        .filter((s) => !s.includes("index"))
+        .map((name) => name.split("/").pop());
 
 const foldersMap = new Map();
 
@@ -23,10 +23,10 @@ const getFolders = (key) => {
 };
 
 const arrayEquals = (arr1, arr2) =>
-  arr1.length == arr2.length &&
-  arr1.every(function (u, i) {
-    return u === arr2[i];
-  });
+    arr1.length == arr2.length &&
+    arr1.every(function (u, i) {
+      return u === arr2[i];
+    });
 
 module.exports = class CreateExports {
   constructor(options) {
@@ -46,16 +46,16 @@ module.exports = class CreateExports {
       const file = fs.lstatSync(filePath);
       if (file.isDirectory()) {
         filePath = getFilesWithExtension(filePath)
-          .filter((f) => f.includes(`index${this.options.extension}`))
-          .pop();
+            .filter((f) => f.includes(`index${this.options.extension}`))
+            .pop();
       }
 
       const fileStream = fs.readFileSync(filePath, "utf8");
 
       const hasDefaultExport = fileStream
-        .toString()
-        .split("\n")
-        .find((s) => s.startsWith("export default"));
+          .toString()
+          .split("\n")
+          .find((s) => s.startsWith("export default"));
       return hasDefaultExport ? exps.default : exps.named;
     };
 
@@ -69,8 +69,8 @@ module.exports = class CreateExports {
       paths.forEach((p) => {
         const exportType = p.exportType || this.options.exportType || "named";
         const path = join(
-          baseDir || process.cwd(),
-          typeof p === "string" ? p : p.path
+            baseDir || process.cwd(),
+            typeof p === "string" ? p : p.path
         );
 
         let entries = getFiles(path);
@@ -82,17 +82,17 @@ module.exports = class CreateExports {
 
         if (p.ignore) {
           entries = entries.filter((e) =>
-            typeof p.ignore === "string"
-              ? !e.includes(p.ignore)
-              : !p.ignore.test(e)
+              typeof p.ignore === "string"
+                  ? !e.includes(p.ignore)
+                  : !p.ignore.test(e)
           );
         }
 
         try {
           const imports = entries.reduce(
-            (acc, folder) =>
-              `${acc}${this.createExports(exportType, folder, path)}\n`,
-            ""
+              (acc, folder) =>
+                  `${acc}${this.createExports(exportType, folder, path)}\n`,
+              ""
           );
 
           fs.writeFile(`${path}/index${extension}`, imports, (err) => {
