@@ -50,7 +50,7 @@ module.exports = class CreateExports {
             .pop();
       }
 
-      if (!filepath) return exps.named
+      if (!filePath) return exps.named
 
       const fileStream = fs.readFileSync(filePath, "utf8");
 
