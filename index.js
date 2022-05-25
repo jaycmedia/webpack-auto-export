@@ -66,7 +66,7 @@ module.exports = class CreateExports {
 
   apply(compiler) {
     compiler.hooks.compilation.tap("CreateExports", (compilation) => {
-      const { baseDir, extension, paths } = this.options;
+      const { baseDir, extension, paths, ignoreIf } = this.options;
 
       paths.forEach((p) => {
         const exportType = p.exportType || this.options.exportType || "named";
@@ -88,6 +88,10 @@ module.exports = class CreateExports {
                   ? !e.includes(p.ignore)
                   : !p.ignore.test(e)
           );
+        }
+
+        if (ignoreIf?.(path)) {
+          return;
         }
 
         try {
