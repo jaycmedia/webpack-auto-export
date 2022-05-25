@@ -92,7 +92,7 @@ module.exports = class CreateExports {
                     );
                 }
 
-                if (ignoreIf?.(path)) {
+                if (ignoreIf && ignoreIf(path)) {
                     return;
                 }
 
