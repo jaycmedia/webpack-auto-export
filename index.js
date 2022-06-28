@@ -66,7 +66,7 @@ module.exports = class CreateExports {
 
     apply(compiler) {
         compiler.hooks.compilation.tap("CreateExports", (compilation) => {
-            const {baseDir, extension, paths, ignoreIf, includeExtensions = ['jsx', 'js', '']} = this.options;
+            const {baseDir, extension, paths, ignoreIf, includeExtensions = ['jsx', 'js', '', 'tsx', 'ts']} = this.options;
 
             paths.forEach((p) => {
                 const exportType = p.exportType || this.options.exportType || "named";
@@ -77,7 +77,7 @@ module.exports = class CreateExports {
 
                 let entries = getFiles(path);
                 entries = entries.filter(s => s.split('.').length <= 1 || includeExtensions.includes(s.split('.').pop()));
-                
+
                 if (arrayEquals(entries, getFolders(path))) {
                     return;
                 }
